@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "assembly-net"
+version = "0.1.0"
+description = "Topology-Aware Learning of Emergent Material Properties from Coordination-Network Assembly Graphs"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Assembly-Net Contributors"}
+]
+keywords = [
+    "materials-science",
+    "graph-neural-networks",
+    "topological-data-analysis",
+    "persistent-homology",
+    "coordination-networks",
+    "machine-learning",
+    "assembly-processes"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "numpy>=1.21.0",
+    "scipy>=1.7.0",
+    "torch>=2.0.0",
+    "torch-geometric>=2.3.0",
+    "networkx>=2.6.0",
+    "giotto-tda>=0.6.0",
+    "scikit-learn>=1.0.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "pandas>=1.3.0",
+    "tqdm>=4.62.0",
+    "pyyaml>=6.0",
+    "tensorboard>=2.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+    "plotly>=5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/assembly-net/assembly-net"
+Documentation = "https://github.com/assembly-net/assembly-net#readme"
+Repository = "https://github.com/assembly-net/assembly-net"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["assembly_net*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=assembly_net"
