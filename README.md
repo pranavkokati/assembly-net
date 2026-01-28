@@ -210,8 +210,8 @@ The simulator generates ground-truth labels based on network topology:
 
 ```
                     ┌─────────────────────────────────────────┐
-                    │         Assembly Trajectory              │
-                    │    [G₀, G₁, G₂, ..., Gₜ] + Topology     │
+                    │         Assembly Trajectory             │
+                    │    [G₀, G₁, G₂, ..., Gₜ] + Topology      |
                     └────────────────┬────────────────────────┘
                                      │
                     ┌────────────────▼────────────────────────┐
