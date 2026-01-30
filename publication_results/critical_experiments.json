@@ -1,0 +1,47 @@
+{
+  "isomorphic_failure": {
+    "num_pairs": 0
+  },
+  "topology_vs_simple": {
+    "simple_correlations": {
+      "Average Degree": -0.05060591772769489,
+      "Max Degree": -0.026296025740288023,
+      "Clustering Coef.": 0.0,
+      "Density": -0.12768614501584755
+    },
+    "topo_correlations": {
+      "\u03b2\u2081 (Cycles)": 0.10156390339207731,
+      "ELDI": -0.130435608484601,
+      "Percolation Time": -0.9985573894707596
+    },
+    "best_simple": -0.12768614501584755,
+    "best_topo": -0.9985573894707596,
+    "r2_simple": 0.05062304370461346,
+    "r2_topo": 0.999987220026672
+  },
+  "literature_validation": {
+    "dla_mean_score": 0.9916083149185481,
+    "rla_mean_score": 0.0,
+    "burst_mean_score": -3.6686315173305197,
+    "dla_classes": {
+      "robust": 80,
+      "ductile": 0,
+      "brittle": 0
+    },
+    "rla_classes": {
+      "robust": 0,
+      "ductile": 0,
+      "brittle": 80
+    },
+    "burst_classes": {
+      "robust": 54,
+      "ductile": 1,
+      "brittle": 25
+    },
+    "consistency_checks": [
+      "\u2713 Assembly regime significantly affects mechanical properties",
+      "? Limited variation within regimes",
+      "\u2713 Regime strongly determines mechanical class"
+    ]
+  }
+}

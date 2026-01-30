@@ -532,8 +532,12 @@ class EmergentPropertyTheory:
     arises from the collective behavior of the network, not attributable
     to individual components.
 
-    Theorem 1 (Assembly Non-Equivalence).
+    =========================================================================
+    THEOREM 1: ASSEMBLY NON-EQUIVALENCE
+    =========================================================================
 
+    Statement:
+    ----------
     There exist pairs of assembly trajectories T_1, T_2 such that:
 
         G_1(T_final) ≅ G_2(T_final)  (isomorphic final structures)
@@ -542,9 +546,52 @@ class EmergentPropertyTheory:
 
         P(T_1) ≠ P(T_2)  (different emergent properties)
 
-    Proof sketch: The mechanical score depends on the early loop dominance
-    index (ELDI), which is determined by WHEN cycles formed, not just
-    how many cycles exist in the final structure.
+    REQUIRED ASSUMPTIONS (A1-A5):
+    -----------------------------
+
+    (A1) IRREVERSIBILITY: Bond dissociation rate k_off << k_on.
+         Bonds, once formed, persist for timescales longer than assembly.
+         If fully reversible (k_off ≈ k_on), the system reaches equilibrium
+         and trajectory history is erased. The theorem does NOT hold.
+
+    (A2) FINITE VALENCY: Nodes have maximum coordination numbers.
+         Metal ions: typically 4-6 coordination sites.
+         Ligands: typically 2-3 binding sites.
+         This creates geometric frustration that makes assembly order matter.
+
+    (A3) NON-EQUILIBRIUM KINETICS: The system is driven by kinetic rates,
+         not thermodynamic equilibrium. Assembly proceeds via stochastic
+         reactions governed by Gillespie dynamics.
+
+    (A4) PATH-DEPENDENT BOND PROPERTIES: Bond strength or other properties
+         depend on WHEN the bond formed during assembly (e.g., early bonds
+         form in less crowded environments → stronger).
+
+    (A5) TOPOLOGY-PROPERTY COUPLING: Emergent properties depend on
+         topological features (cycles, connectivity) and their formation
+         timing, not just the final count.
+
+    COROLLARY (When Theorem Does NOT Hold):
+    --------------------------------------
+    If reversibility is allowed (A1 violated):
+        The system can reach thermodynamic equilibrium.
+        All trajectories leading to the same final structure become equivalent.
+        P(T_1) = P(T_2) for G_1(T) ≅ G_2(T).
+
+    If valency is unlimited (A2 violated):
+        No geometric frustration → all assembly paths equivalent.
+
+    Proof Sketch:
+    ------------
+    The mechanical score M(T) depends on the Early Loop Dominance Index (ELDI),
+    which is determined by WHEN cycles formed during assembly. Two trajectories
+    can reach isomorphic final graphs G_1(T) ≅ G_2(T) with identical β_1,
+    but with different loop formation times:
+
+        T_1: Loops form at t ∈ [0, T/2]    → ELDI_1 ≈ 1
+        T_2: Loops form at t ∈ [T/2, T]    → ELDI_2 ≈ 0
+
+    Since M depends on ELDI: M(T_1) ≠ M(T_2).  ∎
 
     Physical Justification (Mechanical Properties)
     ----------------------------------------------
@@ -574,6 +621,10 @@ class EmergentPropertyTheory:
     ----------
     [4] Caruso, M. M. et al. (2009). Mechanically-induced chemical changes
         in polymeric materials. Chem. Rev. 109(11), 5755-5798.
+    [5] Meakin, P. (1988). Fractal aggregates and their fractal measures.
+        Phase Transitions, 12(3), 151-203.
+    [6] Lin, M. Y. et al. (1989). Universality in colloid aggregation.
+        Nature, 339(6223), 360-362.
     """
 
     # Empirically determined weights for mechanical score
@@ -587,6 +638,53 @@ class EmergentPropertyTheory:
     # Classification thresholds
     ROBUST_THRESHOLD = 0.65
     DUCTILE_THRESHOLD = 0.35
+
+    # Theorem assumptions for reference
+    THEOREM_ASSUMPTIONS = {
+        'A1': {
+            'name': 'Irreversibility',
+            'statement': 'k_off << k_on: bonds persist once formed',
+            'violation_consequence': 'System reaches equilibrium; trajectory history erased',
+        },
+        'A2': {
+            'name': 'Finite Valency',
+            'statement': 'Nodes have maximum coordination numbers',
+            'violation_consequence': 'No geometric frustration; all paths equivalent',
+        },
+        'A3': {
+            'name': 'Non-equilibrium Kinetics',
+            'statement': 'Assembly driven by stochastic kinetics, not equilibrium',
+            'violation_consequence': 'Final state determined by thermodynamics alone',
+        },
+        'A4': {
+            'name': 'Path-dependent Bond Properties',
+            'statement': 'Bond properties depend on formation time',
+            'violation_consequence': 'All bonds identical; no history encoding',
+        },
+        'A5': {
+            'name': 'Topology-Property Coupling',
+            'statement': 'Properties depend on topology formation timing',
+            'violation_consequence': 'Only final topology matters; static analysis sufficient',
+        },
+    }
+
+    @classmethod
+    def list_theorem_assumptions(cls) -> str:
+        """Return formatted list of theorem assumptions."""
+        lines = ["THEOREM 1 ASSUMPTIONS:", "=" * 50]
+        for key, assumption in cls.THEOREM_ASSUMPTIONS.items():
+            lines.append(f"\n({key}) {assumption['name']}")
+            lines.append(f"    Statement: {assumption['statement']}")
+            lines.append(f"    If violated: {assumption['violation_consequence']}")
+        return "\n".join(lines)
+
+    @classmethod
+    def check_assumption_violated(cls, assumption_key: str) -> str:
+        """Return what happens if a specific assumption is violated."""
+        if assumption_key in cls.THEOREM_ASSUMPTIONS:
+            a = cls.THEOREM_ASSUMPTIONS[assumption_key]
+            return f"If {a['name']} violated: {a['violation_consequence']}"
+        return f"Unknown assumption: {assumption_key}"
 
     @classmethod
     def mechanical_score(
@@ -621,13 +719,15 @@ class EmergentPropertyTheory:
         term1 = cls.W_EARLY_LOOP * early_loop_dominance
 
         # Percolation timing contribution
-        if percolation_time is not None:
-            term2 = cls.W_PERCOLATION * (1.0 - percolation_time / total_time)
+        # Clamp to [0, 1] to handle edge cases where perc_time > total_time
+        if percolation_time is not None and total_time > 0:
+            perc_factor = max(0.0, min(1.0, 1.0 - percolation_time / total_time))
+            term2 = cls.W_PERCOLATION * perc_factor
         else:
             term2 = 0.0
 
         # Cycle density contribution
-        term3 = cls.W_CYCLE_DENSITY * min(1.0, beta_1_final / cls.BETA_1_TARGET)
+        term3 = cls.W_CYCLE_DENSITY * min(1.0, max(0.0, beta_1_final / cls.BETA_1_TARGET))
 
         return term1 + term2 + term3
 
