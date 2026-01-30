@@ -193,7 +193,7 @@ def find_isomorphic_pairs(
 
 def experiment_isomorphic_failure(num_attempts: int = 300, seed: int = 42) -> Dict:
     """
-    CRITICAL EXPERIMENT: Demonstrate static model failure on isomorphic pairs.
+    CRITICAL EXPERIMENT: Demonstrate static model insufficiency on isomorphic pairs.
 
     This is the SINGLE STRONGEST empirical argument for the paper.
 
@@ -201,9 +201,10 @@ def experiment_isomorphic_failure(num_attempts: int = 300, seed: int = 42) -> Di
     - Final graph is isomorphic (same edges, degree sequence, cycles)
     - BUT emergent properties differ (different ELDI, mechanical score)
 
-    A static model sees IDENTICAL inputs for these pairs.
-    Therefore, it MUST predict identical outputs.
-    Therefore, it MUST fail on at least one member of each pair.
+    Under assumptions A1-A5 (see EmergentPropertyTheory.THEOREM_ASSUMPTIONS):
+    - A static model sees IDENTICAL inputs for these pairs
+    - Therefore, it is information-theoretically insufficient to distinguish them
+    - Therefore, it will fail on at least one member of each pair
 
     A temporal model sees DIFFERENT inputs (different assembly history).
     Therefore, it CAN predict different outputs.
@@ -217,8 +218,9 @@ def experiment_isomorphic_failure(num_attempts: int = 300, seed: int = 42) -> Di
     print("  1. Final structures are IDENTICAL (isomorphic graphs)")
     print("  2. Emergent properties are DIFFERENT")
     print()
-    print("IMPLICATION: Static models MUST fail on these pairs.")
-    print("            They see identical inputs but need different outputs.")
+    print("IMPLICATION (under assumptions A1-A5):")
+    print("  Static models are information-theoretically insufficient.")
+    print("  They see identical inputs but need different outputs.")
     print()
 
     pairs = find_isomorphic_pairs(num_attempts, seed)
@@ -832,6 +834,66 @@ def experiment_literature_validation(num_samples: int = 100, seed: int = 42) -> 
 
 
 # =============================================================================
+# LIMITATIONS
+# =============================================================================
+
+LIMITATIONS = """
+KNOWN LIMITATIONS OF THIS FRAMEWORK
+====================================
+
+This framework makes several simplifying assumptions that should be
+considered when interpreting results:
+
+1. NO SPATIAL EMBEDDING
+   - Nodes have no spatial coordinates
+   - Bond formation does not depend on geometric distance
+   - Real coordination chemistry is 3D with steric effects
+   - Implication: May miss geometric frustration effects
+
+2. NO ATOMISTIC RESOLUTION
+   - Nodes represent entire metal ions or ligands
+   - No explicit electron density or orbital information
+   - Bond strengths are phenomenological, not quantum-mechanical
+   - Implication: Cannot predict detailed spectroscopic properties
+
+3. NO SOLVENT DYNAMICS
+   - Assembly occurs in an implicit medium
+   - No solvent viscosity, diffusion coefficients, or solvation shells
+   - pH effects are modeled phenomenologically via rate modulation
+   - Implication: Cannot capture solvent-mediated kinetics
+
+4. SIMPLIFIED KINETICS
+   - Single reaction type: metal-ligand coordination
+   - No side reactions, aggregation, or phase transitions
+   - Rate constants from transition state theory (Eyring), not MD
+   - Implication: May not capture complex reaction networks
+
+5. GRAPH ABSTRACTION
+   - Network represented as undirected graph
+   - No bond order, hybridization, or coordination geometry
+   - No explicit treatment of chelate vs. bridging modes
+   - Implication: Loses chemical specificity
+
+SCOPE OF VALIDITY
+-----------------
+Despite these limitations, the framework is valid for:
+- Demonstrating information-theoretic arguments about static vs. temporal models
+- Establishing qualitative relationships between assembly history and properties
+- Generating hypotheses for experimental validation
+- Comparing different assembly regimes at a coarse-grained level
+
+The core claim (assembly history affects emergent properties in ways not
+captured by final structure) remains valid under assumptions A1-A5,
+independent of these simplifications.
+"""
+
+
+def print_limitations():
+    """Print the limitations section."""
+    print(LIMITATIONS)
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
@@ -842,7 +904,7 @@ def run_all_critical_experiments(seed: int = 42):
     print("=" * 70)
     print()
     print("These experiments establish the core empirical claims:")
-    print("1. Static models provably fail on isomorphic pairs")
+    print("1. Static models are information-theoretically insufficient (under A1-A5)")
     print("2. Topological features outperform simple graph statistics")
     print("3. Results are consistent with known literature")
     print()
@@ -853,6 +915,12 @@ def run_all_critical_experiments(seed: int = 42):
     results['topology_vs_simple'] = experiment_topology_vs_simple_stats(num_samples=150, seed=seed)
     results['literature_validation'] = experiment_literature_validation(num_samples=80, seed=seed)
 
+    # Print limitations
+    print("\n" + "=" * 70)
+    print("LIMITATIONS")
+    print("=" * 70)
+    print_limitations()
+
     print("\n" + "=" * 70)
     print("ALL CRITICAL EXPERIMENTS COMPLETE")
     print("=" * 70)
@@ -860,6 +928,15 @@ def run_all_critical_experiments(seed: int = 42):
     # Save results
     output_dir = Path("publication_results")
     output_dir.mkdir(exist_ok=True)
+
+    # Add limitations to results
+    results['limitations'] = {
+        'no_spatial_embedding': True,
+        'no_atomistic_resolution': True,
+        'no_solvent_dynamics': True,
+        'simplified_kinetics': True,
+        'graph_abstraction': True,
+    }
 
     with open(output_dir / "critical_experiments.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
