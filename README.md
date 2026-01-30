@@ -136,10 +136,30 @@ Install core dependencies only:
 ```bash
 pip install -r requirements.txt
 ```
-
-Install full ML dependencies:
-```bash
-pip install -r requirements-full.txt
+                    ┌─────────────────────────────────────────┐
+                    │         Assembly Trajectory             │
+                    │    [G₀, G₁, G₂, ..., Gₜ] + Topology      |
+                    └────────────────┬────────────────────────┘
+                                     │
+                    ┌────────────────▼────────────────────────┐
+                    │           GNN Encoder (per timestep)     │
+                    │         GAT/GCN/GIN + Pooling            │
+                    └────────────────┬────────────────────────┘
+                                     │
+                    ┌────────────────▼────────────────────────┐
+                    │        Topology Injection (FiLM)         │
+                    │   Persistent homology + Rigidity         │
+                    └────────────────┬────────────────────────┘
+                                     │
+                    ┌────────────────▼────────────────────────┐
+                    │     Temporal Transformer/LSTM            │
+                    │        Assembly dynamics                 │
+                    └────────────────┬────────────────────────┘
+                                     │
+                    ┌────────────────▼────────────────────────┐
+                    │        Property Prediction Head          │
+                    │   Classification + Regression            │
+                    └─────────────────────────────────────────┘
 ```
 
 ## Known Limitations
