@@ -14,6 +14,10 @@ Assembly-Net demonstrates that **assembly history affects emergent material prop
 
 Static ML models are **information-theoretically insufficient** (under assumptions A1-A5) for predicting properties of assembly-driven materials. Temporal models that observe the assembly process can access information unavailable to static models.
 
+### Scope of Claims
+
+We claim that static models are **insufficient under assumptions A1-A5** (irreversibility, finite valency, non-equilibrium kinetics, path-dependent bonds, topology-property coupling). If these assumptions are violated (e.g., fully reversible assembly reaching thermodynamic equilibrium), the theorem does not hold. This precision reflects the actual scope of our results—we make no claims beyond what the theory supports.
+
 ## Quick Start
 
 ```bash
