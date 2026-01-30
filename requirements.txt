@@ -1,0 +1,13 @@
+# Assembly-Net Core Requirements
+# These are minimal dependencies for running experiments (no GPU required)
+# Install: pip install -r requirements.txt
+
+# Core scientific computing
+numpy>=1.21.0,<2.0.0
+
+# Graph algorithms
+networkx>=2.6.0,<4.0.0
+
+# Standard library extensions (usually built-in, listed for completeness)
+# dataclasses  # Built into Python 3.7+
+# typing       # Built into Python 3.5+

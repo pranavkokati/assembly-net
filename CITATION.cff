@@ -1,0 +1,60 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Assembly-Net: Topology-Aware Learning of Emergent Material Properties"
+version: 1.0.0
+date-released: 2024-01-30
+url: "https://github.com/pranavkokati/assembly-net"
+repository-code: "https://github.com/pranavkokati/assembly-net"
+license: MIT
+authors:
+  - name: "Assembly-Net Contributors"
+keywords:
+  - materials science
+  - machine learning
+  - graph neural networks
+  - topological data analysis
+  - coordination networks
+  - assembly processes
+abstract: >-
+  Assembly-Net demonstrates that static machine learning models are
+  information-theoretically insufficient (under assumptions A1-A5) for
+  predicting emergent properties of assembly-driven materials. The framework
+  provides a validated Gillespie simulator for coordination network assembly,
+  formal theoretical foundations, and critical experiments establishing the
+  core scientific claims.
+references:
+  - type: article
+    authors:
+      - family-names: Gillespie
+        given-names: Daniel T.
+    title: "Exact stochastic simulation of coupled chemical reactions"
+    journal: "The Journal of Physical Chemistry"
+    volume: 81
+    issue: 25
+    pages: "2340-2361"
+    year: 1977
+    doi: "10.1021/j100540a008"
+  - type: article
+    authors:
+      - family-names: Edelsbrunner
+        given-names: Herbert
+      - family-names: Harer
+        given-names: John
+    title: "Persistent homology - a survey"
+    journal: "Contemporary Mathematics"
+    volume: 453
+    pages: "257-282"
+    year: 2008
+  - type: article
+    authors:
+      - family-names: Ejima
+        given-names: Hirotaka
+      - name: "et al."
+    title: "One-step assembly of coordination complexes for versatile film and particle engineering"
+    journal: "Science"
+    volume: 341
+    issue: 6142
+    pages: "154-157"
+    year: 2013
+    doi: "10.1126/science.1237265"
